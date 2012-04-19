@@ -1,0 +1,141 @@
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>de.root1</groupId>
+    <artifactId>rxtx-rebundled</artifactId>
+    <version>2.1-7r2</version>
+  
+    <packaging>jar</packaging>
+
+    <name>rxtx-rebundled ${project.version}</name>
+    <description>
+        rxtx-rebundled 2.1-7r2 is a slightly modified version of the original 
+        rxtx 2.1-7r2. The only difference is: 
+
+        1) It's a working mavenized library
+        2) There's just one JAR required. Nothing else. The native libs are bundled 
+        with the jar-file. 
+        3) You don't have to care about "java.library.path". This version will on 
+        startup extract the correct native libs to system temp folder and loads them 
+        automatically. When JVM terminates, temp files will be removed.
+    </description>
+  
+    <url>http://maven.apache.org</url>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+  
+    <developers>
+        <developer>
+            <id>achristian</id>
+            <name>Alexander Christian</name>
+            <email>info_NOSPAM_@root1.de</email>
+            <roles>
+                <role>Project Manager</role>
+                <role>Architect</role>
+            </roles>
+            <organization>root1.de</organization>
+            <timezone>+1</timezone>
+        </developer>
+    </developers>
+    
+    <licenses>
+        <license>
+            <name>GNU LESSER GENERAL PUBLIC LICENSE Version 3, 29 June 2007</name>
+            <url>lgpl-3.0.txt</url>
+        </license>
+    </licenses>
+    
+    <scm>
+        <connection>scm:svn:http://svn.root1.de/svn/rxtx-rebundled</connection>
+        <url>http://svn.root1.de/svn/rxtx-rebundled</url>
+    </scm>    
+    
+    <!-- upload informations for deploying the jar -->
+    <distributionManagement>
+        <repository>
+            <id>root1-releases</id>
+            <name>internal releases</name>
+            <url>http://nexus.root1.de/content/repositories/releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>root1-snapshots</id>
+            <name>internal snapshots</name>
+            <url>http://nexus.root1.de/content/repositories/snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+    
+    <build>
+        <plugins>
+            
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.1.2</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.7</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                    <encoding>UTF-8</encoding>
+                    <showDeprecation>true</showDeprecation>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>changelog-maven-plugin</artifactId>
+                <version>2.0-beta-1</version>
+            </plugin>
+
+        </plugins>
+
+        <!-- add licensing informations to jar file -->
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+            <resource>
+                <filtering>true</filtering>
+                <directory>${basedir}</directory>
+                <includes>
+                    <include>*.txt</include>
+                </includes>
+            </resource>
+        </resources>
+    </build>
+
+    <dependencies>
+    </dependencies>
+</project>
