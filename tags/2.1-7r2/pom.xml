@@ -123,6 +123,10 @@
         <!-- add licensing informations to jar file -->
         <resources>
             <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+            <resource>
                 <filtering>true</filtering>
                 <directory>${basedir}</directory>
                 <includes>
