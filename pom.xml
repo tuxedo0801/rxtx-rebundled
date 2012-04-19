@@ -5,14 +5,14 @@
 
     <groupId>de.root1</groupId>
     <artifactId>rxtx-rebundled</artifactId>
-    <version>2.1-7r2</version>
+    <version>2.2-SNAPSHOT</version>
   
     <packaging>jar</packaging>
 
     <name>rxtx-rebundled ${project.version}</name>
     <description>
-        rxtx-rebundled 2.1-7r2 is a slightly modified version of the original 
-        rxtx 2.1-7r2. The only difference is: 
+        rxtx-rebundled 2.2 is a slightly modified version of the original 
+        rxtx 2.2. The only difference is: 
 
         1) It's a working mavenized library
         2) There's just one JAR required. Nothing else. The native libs are bundled 

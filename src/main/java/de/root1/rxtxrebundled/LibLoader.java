@@ -101,6 +101,8 @@ public class LibLoader {
             logStdOut("Sorry, platform '"+osName+"' currently not supported by LibLoader. Please use -Djava.library.path=<insert path to native libs here> as JVM parameter...");
         }
         
+        logStdOut("Map: "+extractedLibs);
+        
     }
     
     /**
