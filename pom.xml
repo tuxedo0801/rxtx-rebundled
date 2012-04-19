@@ -123,8 +123,8 @@
         <!-- add licensing informations to jar file -->
         <resources>
             <resource>
+                <filtering>false</filtering>
                 <directory>src/main/resources</directory>
-                <filtering>true</filtering>
             </resource>
             <resource>
                 <filtering>true</filtering>
