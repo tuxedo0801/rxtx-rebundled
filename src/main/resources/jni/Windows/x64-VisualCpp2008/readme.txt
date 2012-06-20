@@ -1,0 +1,1 @@
+64bit libs from http://www.cloudhopper.com/opensource/rxtx/ which is RXTX 2.2 ... but they also work with 2.1-7r2 :-)
