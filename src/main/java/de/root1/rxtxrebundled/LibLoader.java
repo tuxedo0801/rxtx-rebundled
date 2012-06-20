@@ -67,7 +67,9 @@ public class LibLoader {
             
             // check for architecture 64bit
             if (osArch.toLowerCase().contains("amd64") || osArch.toLowerCase().contains("x86_64")) {
-                // currently no 64bit lib available ...
+                // 64bit libs from http://www.cloudhopper.com/opensource/rxtx/
+                extractedLibs.put("rxtxSerial", extractLib("/jni/Windows/x64-VisualCpp2008/", "rxtxSerial.dll"));
+                extractedLibs.put("rxtxParallel", extractLib("/jni/Windows/x64-VisualCpp2008/", "rxtxSerial.dll"));
             } 
             // else 32bit
             else {
@@ -100,8 +102,6 @@ public class LibLoader {
         else {
             logStdOut("Sorry, platform '"+osName+"' currently not supported by LibLoader. Please use -Djava.library.path=<insert path to native libs here> as JVM parameter...");
         }
-        
-        logStdOut("Map: "+extractedLibs);
         
     }
     
