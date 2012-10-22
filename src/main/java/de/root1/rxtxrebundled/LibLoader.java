@@ -81,7 +81,7 @@ public class LibLoader {
         // check for os x platform
         else if (osName.toLowerCase().contains("os x")) {
             
-            // no arch available or required?!
+            // one lib for PPC, Intel, 32 and 64bit!
             extractedLibs.put("rxtxSerial", extractLib("/jni/Mac_OS_X/", "librxtxSerial.jnilib"));
             
         }
