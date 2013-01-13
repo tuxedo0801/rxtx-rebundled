@@ -127,7 +127,12 @@ public class LibLoader {
 
 		File tempFolder = new File(System.getProperty("java.io.tmpdir"));
 
-		File rxtxTmp = new File(tempFolder, LIBLOADER_VERSION_NAME);
+                // Workaround for getting a temp-folder
+                File tmpFile = File.createTempFile(LIBLOADER_VERSION_NAME, "", tempFolder);
+                String rxtxTmpName = tmpFile.getName();
+                tmpFile.delete();
+                
+		File rxtxTmp = new File(tempFolder, rxtxTmpName);
 		rxtxTmp.mkdirs();
 		rxtxTmp.deleteOnExit();
 
