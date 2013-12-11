@@ -20,9 +20,12 @@ package de.root1.rxtxrebundled;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Helper Class used by rxtx implementation to load native libs without having 
@@ -120,8 +123,9 @@ public class LibLoader {
         
         String libSource = folder + libFileName;
         
+        InputStream resourceAsStream = null;
 	try {
-	    InputStream resourceAsStream = LibLoader.class.getResourceAsStream(libSource);
+	    resourceAsStream = LibLoader.class.getResourceAsStream(libSource);
 
 	    if (resourceAsStream != null) {
 
@@ -155,7 +159,14 @@ public class LibLoader {
 	} catch (Exception ex) {
 	    logStdErr("Error extracting " + libSource  + " to temp... written bytes: " + written);
             logExceptionToStdErr(ex);
-	}
+	} finally {
+            if (resourceAsStream!=null) {
+                try {
+                    resourceAsStream.close();
+                } catch (IOException ex) {
+                }
+            }
+        }
         return null;
     }
     
