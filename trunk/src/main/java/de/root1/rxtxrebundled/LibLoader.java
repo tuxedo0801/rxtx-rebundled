@@ -18,14 +18,14 @@
 --------------------------------------------------------------------------*/
 package de.root1.rxtxrebundled;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Helper Class used by rxtx implementation to load native libs without having 
@@ -33,10 +33,12 @@ import java.util.logging.Logger;
  * Native libs will be extracted and loaded automatically, if possible
  * 
  * @author achr
+ * @author sitec systems GmbH
  */
 public class LibLoader {
     
-    private static final String LIBLOADER_VERSION_NAME = "rxtx-rebundled-2.1-7r2";
+    private static final String LIBLOADER_VERSION_NAME = "rxtx-rebundled-2.1-7r3";
+    private static final String HF_ABI_SUPPORT = "Tag_ABI_VFP_args: VFP registers";
     
     /**
      * <code>Map&lt;Name of lib i.e. 'rxtxSerial', path to extracted lib&gt;</code><br>
@@ -53,9 +55,26 @@ public class LibLoader {
         
         // check for linux platform ..
         if (osName.toLowerCase().contains("linux")) {
-            
+            // check for architecture arm
+            if (osArch.toLowerCase().contains("arm")) {
+                try {
+                    // check for hard float or soft float abi
+                    if (isHardFloatAbi()) {
+                        logStdOut("Float ABI=Hard Float (armhf)");
+                        // armhf libs from Debian project (https://packages.debian.org/wheezy/librxtx-java)
+                        extractedLibs.put("rxtxSerial", extractLib("/jni/Linux/armhf-unknown-linux-gnu/", "librxtxSerial.so"));
+                    } else {
+                        logStdOut("Float ABI=Soft Float (armel)");
+                        // armel libs from Debian project (https://packages.debian.org/wheezy/librxtx-java)
+                        extractedLibs.put("rxtxSerial", extractLib("/jni/Linux/armel-unknown-linux-gnu/", "librxtxSerial.so"));
+                    }
+                } catch (final IOException ex) {
+                    logStdErr("The check for arm float ABI has failed: " + ex.getMessage());
+                    logExceptionToStdErr(ex);
+                }
+            }
             // check for architecture 64bit
-            if (osArch.toLowerCase().contains("amd64") || osArch.toLowerCase().contains("x86_64")) {
+            else if (osArch.toLowerCase().contains("amd64") || osArch.toLowerCase().contains("x86_64")) {
                 extractedLibs.put("rxtxSerial", extractLib("/jni/Linux/x86_64-unknown-linux-gnu/", "librxtxSerial.so"));
             } 
             // else 32bit
@@ -108,6 +127,47 @@ public class LibLoader {
         
         logStdOut("Map: "+extractedLibs);
         
+    }
+    
+    /**
+     * Checks the platform for hard float abi support.
+     * @return <code>true<code> - The hard float abi is supported / <code>false</code>
+     *         - Only soft float abi is supported
+     * @throws IOException The reading of abi from ELF header has failed
+     */
+    private static boolean isHardFloatAbi() throws IOException {
+        final ProcessBuilder pb = new ProcessBuilder("readelf", "-A", "/proc/self/exe");
+        final Process p = pb.start();
+        try {
+            p.waitFor();
+        } catch (final InterruptedException ex) {
+            logStdErr("The ABI request was interrupted");
+        }
+
+        if(p.exitValue() != 0) {
+            throw new IOException("The ABI request has failed");
+        }
+		
+        BufferedReader br = null;
+        try {
+            br = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            
+            String line;
+            boolean result = false;
+            
+            while((line = br.readLine()) != null) {
+                if(line.contains(HF_ABI_SUPPORT)) {
+                    result = true;
+                    break;
+                }
+            }
+            
+            return result;
+        } finally {
+            if(br != null) {
+                br.close();
+            }
+        }
     }
     
     /**
