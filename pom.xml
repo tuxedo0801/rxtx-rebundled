@@ -5,9 +5,9 @@
 
     <groupId>de.root1</groupId>
     <artifactId>rxtx-rebundled</artifactId>
-    <version>2.1-7r2-4</version>
+    <version>2.1-7r2-5</version>
   
-    <packaging>bundle</packaging>
+    <packaging>jar</packaging>
 
     <name>rxtx-rebundled ${project.version}</name>
     <description>
@@ -22,7 +22,7 @@
         automatically. When JVM terminates, temp files will be removed.
     </description>
   
-    <url>http://maven.apache.org</url>
+    <url>http://dev.root1.de/projects/rxtx-rebundled/</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -30,22 +30,17 @@
   
     <developers>
         <developer>
-            <id>achristian</id>
             <name>Alexander Christian</name>
             <email>info_NOSPAM_@root1.de</email>
-            <roles>
-                <role>Project Manager</role>
-                <role>Architect</role>
-            </roles>
             <organization>root1.de</organization>
-            <timezone>+1</timezone>
+            <organizationUrl>http://www.root1.de</organizationUrl>
         </developer>
     </developers>
     
     <licenses>
         <license>
             <name>GNU LESSER GENERAL PUBLIC LICENSE Version 3, 29 June 2007</name>
-            <url>lgpl-3.0.txt</url>
+            <url>https://www.gnu.org/licenses/lgpl-3.0.txt</url>
         </license>
     </licenses>
     
@@ -56,16 +51,14 @@
     
     <!-- upload informations for deploying the jar -->
     <distributionManagement>
-        <repository>
-            <id>root1-releases</id>
-            <name>internal releases</name>
-            <url>http://nexus.root1.de/content/repositories/releases/</url>
-        </repository>
         <snapshotRepository>
-            <id>root1-snapshots</id>
-            <name>internal snapshots</name>
-            <url>http://nexus.root1.de/content/repositories/snapshots/</url>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
     </distributionManagement>
     
     <build>
@@ -74,7 +67,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>2.1.2</version>
+                <version>2.4</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -88,7 +81,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.7</version>
+                <version>2.10.3</version>
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>
@@ -97,13 +90,16 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <failOnError>false</failOnError>
+                </configuration>
             </plugin>
 
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
+                <version>3.3</version>
                 <configuration>
                     <source>1.6</source>
                     <target>1.6</target>
@@ -122,7 +118,7 @@
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
-                <version>2.4.0</version>
+                <version>2.5.4</version>
                 <extensions>true</extensions>
                 <configuration>
                     <instructions>
@@ -130,7 +126,22 @@
                     </instructions>
                 </configuration>
             </plugin>
-
+            
+            <!-- Signing for upload to maven central -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.6</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>                        
+            </plugin>	
         </plugins>
 
         <!-- add licensing informations to jar file -->
@@ -150,5 +161,6 @@
     </build>
 
     <dependencies>
+        <!-- no dependencies -->
     </dependencies>
 </project>
